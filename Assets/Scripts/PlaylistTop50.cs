@@ -7,10 +7,7 @@ public class PlaylistTop50 : MonoBehaviour
     public AudioClip[] top50;
     private GameManager songsScript;
 
-    private void Awake()
-    {
-        songsScript._audioSource = GetComponent<AudioSource>(); //para obtener la componente de AudioSoure del game manager
-    }
+   
     // Start is called before the first frame update
     void Start()
     {
