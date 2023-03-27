@@ -2,37 +2,56 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 
 public class GameManager : MonoBehaviour
 {
-    public AudioClip[] songs; //donde se encuentran las canciones
-    private int currentSong; //indice arrray
-    private AudioSource _audioSource;
+    public AudioClip[] songs; //donde se encuentran todas las canciones
+  
+    private PlaylistHard hardStyle;
+    private PlaylistPopular popular;
+    private PlaylistTop50 top50;
+
+    public int currentSong; //indice arrray
+    public AudioSource _audioSource;
     public TextMeshProUGUI songText;
+    public Button playButton;
+    public Button pauseButton;
+    
     // Start is called before the first frame update
 
     private void Awake()
     {
         _audioSource= GetComponent<AudioSource>(); //para obtener la componente de AudioSoure del game manager
+        popular = FindObjectOfType<PlaylistPopular>();
+        top50 = FindObjectOfType<PlaylistTop50>();
+        hardStyle = FindObjectOfType<PlaylistHard>();
     }
     void Start()
     {
+        playButton.enabled = false;
         currentSong = 0;
         UpdateSongName();
+        _audioSource.clip = songs[currentSong];
+        _audioSource.Play();
+
+        
     }
 
     public void PlaySong() //funcion para reproducir la cancion
     {
         _audioSource.clip = songs[currentSong];
         _audioSource.Play();
+
         
     }
-    // Update is called once per frame
-    void Update()
+    
+    public void PauseSong()
     {
-        
-    } 
+        _audioSource.Pause();
+        playButton.enabled = true;
+    }
     public void NextSong()
     {
       currentSong++; //para pasar a la siguiente cancion
@@ -59,6 +78,7 @@ public class GameManager : MonoBehaviour
     public void RandomSong()
     {
         currentSong = Random.Range(0, songs.Length);
+        PlaySong();
         UpdateSongName();
     }
 
@@ -73,7 +93,36 @@ public class GameManager : MonoBehaviour
         _audioSource.Play();
     }
 
+    public void PlaylistTop50()
+    {
+        top50.PlaySong();
+    }
 
+    public void PlaylistPopular()
+    {
+        popular.PlaySong();
+    }
+    public void PlaylistHardStyle()
+    {
+        hardStyle.PlaySong();
+    }
+
+    public void PlayButtonFunction()
+    {
+        playButton.interactable = false;
+        pauseButton.interactable = true;
+    }
+    public void PauseButtonFunction()
+    {
+        pauseButton.interactable = false;
+        playButton.interactable = true;
+    }
+
+    public void PlayPauseButtonFunction(bool playButtonHasBeenPressed)
+    {
+        playButton.interactable = !playButtonHasBeenPressed; //false
+        pauseButton.interactable = playButtonHasBeenPressed; //true
+    }
 
 
 
